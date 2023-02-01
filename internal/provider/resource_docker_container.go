@@ -746,9 +746,9 @@ func resourceDockerContainer() *schema.Resource {
 				ForceNew:    true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"name": {
+						"id": {
 							Type:        schema.TypeString,
-							Description: "The name or id of the network to use. You can use `name` or `id` attribute from a `docker_network` resource.",
+							Description: "The id of the network to use. You can use `id` attribute from a `docker_network` resource.",
 							Required:    true,
 							ForceNew:    true,
 						},

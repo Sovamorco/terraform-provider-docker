@@ -509,7 +509,7 @@ func flattenTaskNetworksAdvanced(in []swarm.NetworkAttachmentConfig) *schema.Set
 	out := make([]interface{}, len(in))
 	for i, v := range in {
 		m := make(map[string]interface{})
-		m["name"] = v.Target
+		m["id"] = v.Target
 		m["driver_opts"] = stringSliceToSchemaSet(mapTypeMapValsToStringSlice(mapStringStringToMapStringInterface(v.DriverOpts)))
 		if len(v.Aliases) > 0 {
 			m["aliases"] = stringSliceToSchemaSet(v.Aliases)
@@ -1094,7 +1094,7 @@ func createServiceAdvancedNetworks(v interface{}) ([]swarm.NetworkAttachmentConf
 	if len(v.(*schema.Set).List()) > 0 {
 		for _, rawNetwork := range v.(*schema.Set).List() {
 			rawNetwork := rawNetwork.(map[string]interface{})
-			networkID := rawNetwork["name"].(string)
+			networkID := rawNetwork["id"].(string)
 			networkAliases := stringSetToStringSlice(rawNetwork["aliases"].(*schema.Set))
 			network := swarm.NetworkAttachmentConfig{
 				Target:  networkID,

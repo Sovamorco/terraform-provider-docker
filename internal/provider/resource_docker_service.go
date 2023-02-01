@@ -686,17 +686,15 @@ func resourceDockerService() *schema.Resource {
 							Optional:    true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"name": {
+									"id": {
 										Type:        schema.TypeString,
-										Description: "The name/id of the network.",
+										Description: "The id of the network.",
 										Required:    true,
-										ForceNew:    true,
 									},
 									"aliases": {
 										Type:        schema.TypeSet,
 										Description: "The network aliases of the container in the specific network.",
 										Optional:    true,
-										ForceNew:    true,
 										Elem:        &schema.Schema{Type: schema.TypeString},
 										Set:         schema.HashString,
 									},
@@ -704,7 +702,6 @@ func resourceDockerService() *schema.Resource {
 										Type:        schema.TypeSet,
 										Description: "An array of driver options for the network, e.g. `opts1=value`",
 										Optional:    true,
-										ForceNew:    true,
 										Elem:        &schema.Schema{Type: schema.TypeString},
 									},
 								},

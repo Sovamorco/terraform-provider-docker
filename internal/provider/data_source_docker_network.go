@@ -20,12 +20,13 @@ func dataSourceDockerNetwork() *schema.Resource {
 			"name": {
 				Type:        schema.TypeString,
 				Description: "The name of the Docker network.",
-				Required:    true,
+				Optional:    true,
 			},
 
 			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Description: "The id of the Docker network.",
+				Optional:    true,
 			},
 
 			"driver": {
@@ -96,7 +97,7 @@ type ipamMap map[string]interface{}
 
 func dataSourceDockerNetworkRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	name, nameOk := d.GetOk("name")
-	_, idOk := d.GetOk("id")
+	id, idOk := d.GetOk("id")
 
 	if !nameOk && !idOk {
 		return diag.Errorf("One of id or name must be assigned")
@@ -104,12 +105,19 @@ func dataSourceDockerNetworkRead(ctx context.Context, d *schema.ResourceData, me
 
 	client := meta.(*ProviderConfig).DockerClient
 
-	network, err := client.NetworkInspect(ctx, name.(string), types.NetworkInspectOptions{})
+	var key string
+	if idOk {
+		key = id.(string)
+	} else {
+		key = name.(string)
+	}
+	network, err := client.NetworkInspect(ctx, key, types.NetworkInspectOptions{})
 	if err != nil {
 		return diag.Errorf("Could not find docker network: %s", err)
 	}
 
 	d.SetId(network.ID)
+	d.Set("id", network.ID)
 	d.Set("name", network.Name)
 	d.Set("scope", network.Scope)
 	d.Set("driver", network.Driver)

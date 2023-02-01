@@ -396,7 +396,7 @@ func resourceDockerContainerCreate(ctx context.Context, d *schema.ResourceData, 
 		}
 
 		for _, rawNetwork := range v.(*schema.Set).List() {
-			networkID := rawNetwork.(map[string]interface{})["name"].(string)
+			networkID := rawNetwork.(map[string]interface{})["id"].(string)
 
 			endpointConfig := &network.EndpointSettings{}
 			endpointIPAMConfig := &network.EndpointIPAMConfig{}

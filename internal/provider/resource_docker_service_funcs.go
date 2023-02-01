@@ -105,7 +105,7 @@ func resourceDockerServiceReadRefreshFunc(ctx context.Context,
 		client := meta.(*ProviderConfig).DockerClient
 		serviceID := d.Id()
 
-		apiService, err := fetchDockerService(ctx, serviceID, d.Get("name").(string), client)
+		apiService, err := fetchDockerService(ctx, serviceID, client)
 		if err != nil {
 			return nil, "", err
 		}
@@ -230,14 +230,14 @@ func resourceDockerServiceDelete(ctx context.Context, d *schema.ResourceData, me
 // Helpers
 // ///////////////
 // fetchDockerService fetches a service by its name or id
-func fetchDockerService(ctx context.Context, ID string, name string, client *client.Client) (*swarm.Service, error) {
+func fetchDockerService(ctx context.Context, nameOrID string, client *client.Client) (*swarm.Service, error) {
 	apiServices, err := client.ServiceList(ctx, types.ServiceListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("Error fetching service information from Docker: %s", err)
 	}
 
 	for _, apiService := range apiServices {
-		if apiService.ID == ID || apiService.Spec.Name == name {
+		if apiService.ID == nameOrID || apiService.Spec.Name == nameOrID {
 			return &apiService, nil
 		}
 	}
