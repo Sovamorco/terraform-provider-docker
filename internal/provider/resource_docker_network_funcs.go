@@ -190,7 +190,7 @@ func resourceDockerNetworkReadRefreshFunc(ctx context.Context,
 		}
 
 		log.Println("[DEBUG] all network fields exposed")
-		return networkID, "all_fields", nil
+		return retNetwork.ID, "all_fields", nil
 	}
 }
 
