@@ -126,6 +126,12 @@ func flattenContainerSpec(in *swarm.ContainerSpec) []interface{} {
 	if len(in.Args) > 0 {
 		m["args"] = in.Args
 	}
+	if len(in.CapabilityAdd) > 0 {
+		m["capabilityadd"] = in.CapabilityAdd
+	}
+	if len(in.CapabilityDrop) > 0 {
+		m["capabilitydrop"] = in.CapabilityDrop
+	}
 	if len(in.Hostname) > 0 {
 		m["hostname"] = in.Hostname
 	}
@@ -703,6 +709,12 @@ func createContainerSpec(v interface{}) (*swarm.ContainerSpec, error) {
 			}
 			if value, ok := rawContainerSpec["args"]; ok {
 				containerSpec.Args = stringListToStringSlice(value.([]interface{}))
+			}
+			if value, ok := rawContainerSpec["capabilityadd"]; ok {
+				containerSpec.CapabilityAdd = stringSetToStringSlice(value.(*schema.Set))
+			}
+			if value, ok := rawContainerSpec["capabilitydrop"]; ok {
+				containerSpec.CapabilityDrop = stringSetToStringSlice(value.(*schema.Set))
 			}
 			if value, ok := rawContainerSpec["hostname"]; ok {
 				containerSpec.Hostname = value.(string)

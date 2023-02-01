@@ -406,6 +406,20 @@ func resourceDockerService() *schema.Resource {
 											},
 										},
 									},
+									"capabilityadd": {
+										Type:        schema.TypeSet,
+										Description: "List of linux capabilities to add.",
+										Optional:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Set:         schema.HashString,
+									},
+									"capabilitydrop": {
+										Type:        schema.TypeSet,
+										Description: "List of linux capabilities to drop.",
+										Optional:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Set:         schema.HashString,
+									},
 									"secrets": {
 										Type:        schema.TypeSet,
 										Description: "References to zero or more secrets that will be exposed to the service",
