@@ -1168,6 +1168,7 @@ func createServiceMode(d *schema.ResourceData) (swarm.ServiceMode, error) {
 						}
 					}
 				}
+
 				if rawGlobalMode, globalModeOk := rawMode["global"]; globalModeOk && rawGlobalMode.(bool) {
 					log.Printf("[INFO] Setting service mode to 'global' is %v", rawGlobalMode)
 					serviceMode.Global = &swarm.GlobalService{}

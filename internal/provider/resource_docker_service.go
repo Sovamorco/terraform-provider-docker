@@ -760,6 +760,7 @@ func resourceDockerService() *schema.Resource {
 							MaxItems:      1,
 							Optional:      true,
 							Computed:      true,
+							ForceNew:      true,
 							ConflictsWith: []string{"mode.0.global"},
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -768,6 +769,7 @@ func resourceDockerService() *schema.Resource {
 										Description:      "The amount of replicas of the service. Defaults to `1`",
 										Default:          1,
 										Optional:         true,
+										ForceNew:         false,
 										ValidateDiagFunc: validateIntegerGeqThan(0),
 									},
 								},
@@ -778,7 +780,8 @@ func resourceDockerService() *schema.Resource {
 							Description:   "The global service mode. Defaults to `false`",
 							Default:       false,
 							Optional:      true,
-							ConflictsWith: []string{"mode.0.replicated", "converge_config"},
+							ForceNew:      true,
+							ConflictsWith: []string{"mode.0.replicated"},
 						},
 					},
 				},
@@ -945,11 +948,10 @@ func resourceDockerService() *schema.Resource {
 				},
 			},
 			"converge_config": {
-				Type:          schema.TypeList,
-				Description:   "A configuration to ensure that a service converges aka reaches the desired that of all task up and running",
-				MaxItems:      1,
-				Optional:      true,
-				ConflictsWith: []string{"mode.0.global"},
+				Type:        schema.TypeList,
+				Description: "A configuration to ensure that a service converges aka reaches the desired that of all task up and running",
+				MaxItems:    1,
+				Optional:    true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"delay": {

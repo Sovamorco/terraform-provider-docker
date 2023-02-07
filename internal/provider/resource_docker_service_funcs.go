@@ -500,10 +500,12 @@ type replicatedConsoleLogUpdater struct {
 
 // update is the concrete implementation of updating replicated services
 func (u *replicatedConsoleLogUpdater) update(service *swarm.Service, tasks []swarm.Task, activeNodes map[string]struct{}, rollback bool) (bool, error) {
-	if service.Spec.Mode.Replicated == nil || service.Spec.Mode.Replicated.Replicas == nil {
-		return false, fmt.Errorf("no replica count")
+	var replicas int
+	if service.Spec.Mode.Replicated != nil && service.Spec.Mode.Replicated.Replicas != nil {
+		replicas = int(*service.Spec.Mode.Replicated.Replicas)
+	} else {
+		replicas = len(activeNodes)
 	}
-	replicas := *service.Spec.Mode.Replicated.Replicas
 
 	if !u.initialized {
 		u.slotMap = make(map[int]int)
@@ -523,7 +525,7 @@ func (u *replicatedConsoleLogUpdater) update(service *swarm.Service, tasks []swa
 		}
 	}
 
-	running := uint64(0)
+	running := 0
 
 	// map the slots to keep track of their state individually
 	for _, task := range tasksBySlot {
